@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Cup 2026 Dictionary</title>
+<style>
+  :root{
+    --bg:#0b132b; --bg2:#1c2541; --card:#1b263b; --card2:#22304d;
+    --accent:#ffd23f; --accent2:#3fd2c7; --green:#2ec4b6; --text:#f5f7fa;
+    --muted:#9fb0c8; --line:#2c3a59; --red:#ef476f; --amber:#ffb347;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    background:radial-gradient(1200px 600px at 80% -10%,#1c2541 0%,#0b132b 60%);
+    color:var(--text);min-height:100vh;line-height:1.55;
+  }
+  header.top{padding:24px 20px 16px;text-align:center;border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(255,210,63,.08),transparent);}
+  header.top h1{font-size:1.8rem;letter-spacing:.5px}
+  header.top h1 span{color:var(--accent)}
+  header.top p{color:var(--muted);margin-top:6px;font-size:.9rem}
+  .wrap{max-width:1140px;margin:0 auto;padding:22px 16px 60px}
+  .section-title{font-size:1.2rem;margin:24px 0 10px;display:flex;align-items:center;gap:10px}
+  .section-title::before{content:"";width:6px;height:20px;background:var(--accent);border-radius:3px}
+  .sub{color:var(--muted);font-size:.9rem;margin-bottom:14px}
+
+  nav.tabs{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+  nav.tabs button{background:var(--card);color:var(--text);border:1px solid var(--line);
+    padding:8px 16px;border-radius:999px;cursor:pointer;font-size:.88rem;transition:.15s;}
+  nav.tabs button:hover{border-color:var(--accent)}
+  nav.tabs button.active{background:var(--accent);color:#10182b;font-weight:600;border-color:var(--accent)}
+
+  .grid{display:grid;gap:12px}
+  .grid.rules{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+  .grid.lingo{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+  .grid.teams{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+  .grid.stand{grid-template-columns:repeat(auto-fill,minmax(330px,1fr))}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:15px}
+  .rule-card h3{font-size:1rem;color:var(--accent2);margin-bottom:6px;display:flex;gap:8px;align-items:center}
+  .rule-card p{font-size:.88rem;color:#dde6f2}
+  .lingo-card{padding:13px}
+  .lingo-card .term{font-weight:700;color:var(--accent)}
+  .lingo-card .def{font-size:.85rem;color:#cfdaeb;margin-top:3px}
+
+  .group-label{margin:22px 0 8px;font-size:.85rem;color:var(--accent2);font-weight:700;
+    text-transform:uppercase;letter-spacing:1px}
+  .team-card{cursor:pointer;text-align:center;padding:16px 10px;transition:.15s;
+    background:linear-gradient(160deg,var(--card2),var(--card));}
+  .team-card:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 8px 22px rgba(0,0,0,.35)}
+  .team-card .flag{font-size:2.4rem;line-height:1}
+  .team-card .name{margin-top:7px;font-weight:600;font-size:.92rem}
+  .team-card .grp{font-size:.72rem;color:var(--muted);margin-top:2px}
+
+  /* Standings tables */
+  .stable{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:12px 14px}
+  .stable h4{font-size:.95rem;margin-bottom:8px;color:var(--accent)}
+  table{width:100%;border-collapse:collapse;font-size:.82rem}
+  th{color:var(--muted);font-weight:600;text-align:center;padding:4px 3px;border-bottom:1px solid var(--line)}
+  th.tname,td.tname{text-align:left}
+  td{padding:6px 3px;text-align:center;border-bottom:1px solid rgba(44,58,89,.5)}
+  tr:last-child td{border-bottom:none}
+  td.tname{display:flex;align-items:center;gap:7px;font-weight:600}
+  .pos{width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+    font-size:.7rem;font-weight:700;flex:0 0 18px}
+  .q1,.q2{background:rgba(46,196,182,.25);color:var(--green)}
+  .q3{background:rgba(255,179,71,.22);color:var(--amber)}
+  .qx{background:var(--bg2);color:var(--muted)}
+  td.pts{font-weight:700;color:var(--accent)}
+  .legend{font-size:.78rem;color:var(--muted);margin:6px 0 16px;display:flex;gap:16px;flex-wrap:wrap}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:middle}
+
+  /* Detail */
+  #detail{display:none}
+  .back{background:none;border:1px solid var(--line);color:var(--text);padding:8px 14px;
+    border-radius:8px;cursor:pointer;margin-bottom:16px;font-size:.9rem}
+  .back:hover{border-color:var(--accent)}
+  .team-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+  .team-head .flag{font-size:3.2rem}
+  .team-head h2{font-size:1.8rem}
+  .team-head .meta{color:var(--muted);font-size:.88rem}
+  .pill{display:inline-block;background:var(--bg2);border:1px solid var(--line);color:var(--accent2);
+    font-size:.76rem;padding:3px 10px;border-radius:999px;margin-right:6px;margin-top:6px}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}
+  @media(max-width:760px){.two-col{grid-template-columns:1fr}}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px}
+  .panel h3{font-size:1.02rem;margin-bottom:10px;color:var(--accent)}
+  .player{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .player:last-child{border-bottom:none}
+  .player .av{width:30px;height:30px;flex:0 0 30px;border-radius:7px;background:var(--bg2);
+    display:flex;align-items:center;justify-content:center;font-size:.66rem;color:var(--accent2);font-weight:700}
+  .player .pinfo .pname{font-weight:600;font-size:.92rem}
+  .player .pinfo .pmeta{font-size:.78rem;color:var(--muted)}
+  .match{padding:11px 0;border-bottom:1px solid var(--line)}
+  .match:last-child{border-bottom:none}
+  .match .date{font-size:.76rem;color:var(--accent2);font-weight:600}
+  .match .fix{font-weight:600;margin-top:2px;font-size:.92rem}
+  .match .venue{font-size:.78rem;color:var(--muted)}
+  .badge{float:right;font-size:.76rem;padding:2px 9px;border-radius:6px;font-weight:700}
+  .b-win{background:var(--green);color:#06231f}
+  .b-loss{background:var(--red);color:#fff}
+  .b-draw{background:var(--amber);color:#3a2600}
+  .b-up{background:var(--bg2);color:var(--accent);border:1px solid var(--line);font-weight:500}
+
+  /* Bracket */
+  .kdates{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:6px 0 18px}
+  .kdate{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:12px;text-align:center}
+  .kdate .r{font-weight:700;color:var(--accent2)}
+  .kdate .d{font-size:.8rem;color:var(--muted);margin-top:3px}
+  .kdate .m{font-size:.74rem;color:var(--text);margin-top:4px}
+  .bracket{display:flex;gap:14px;overflow-x:auto;padding-bottom:10px}
+  .bcol{min-width:150px;flex:1}
+  .bcol h5{font-size:.78rem;color:var(--accent);text-align:center;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+  .bslot{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:8px 9px;margin-bottom:9px;font-size:.76rem}
+  .bslot .t{padding:2px 0;color:#cdd8ea}
+  .bslot .t.prov{color:var(--green);font-weight:600}
+  .bslot .vs{color:var(--muted);font-size:.66rem;text-align:center;margin:1px 0}
+  .note{background:rgba(63,210,199,.08);border:1px solid var(--line);border-radius:10px;
+    padding:11px 13px;font-size:.82rem;color:var(--muted);margin:10px 0}
+  footer{text-align:center;color:var(--muted);font-size:.8rem;padding:28px 16px;border-top:1px solid var(--line)}
+  .hidden{display:none !important}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>⚽ World Cup <span>2026</span> Dictionary</h1>
+  <p>USA · Canada · Mexico — June 11 to July 19, 2026 · 48 teams</p>
+  <nav class="tabs" id="homeTabs">
+    <button data-tab="teams" class="active">Teams</button>
+    <button data-tab="standings">Standings</button>
+    <button data-tab="bracket">Bracket</button>
+    <button data-tab="rules">Rules</button>
+    <button data-tab="lingo">Lingo</button>
+  </nav>
+</header>
+
+<div class="wrap">
+  <div id="home">
+    <section id="tab-teams">
+      <div class="section-title">All 48 Teams</div>
+      <div class="sub">Tap any team to see its key players and full group-stage schedule with live results.</div>
+      <div id="teamGroups"></div>
+    </section>
+
+    <section id="tab-standings" class="hidden">
+      <div class="section-title">Group Standings <span style="font-size:.7rem;color:var(--green);margin-left:6px">● LIVE</span></div>
+      <div class="sub">Computed from match results. Updated through June 16, 2026.</div>
+      <div class="legend">
+        <span><span class="dot" style="background:var(--green)"></span>Top 2 — advance</span>
+        <span><span class="dot" style="background:var(--amber)"></span>3rd — in contention (8 best advance)</span>
+      </div>
+      <div class="grid stand" id="standGrid"></div>
+    </section>
+
+    <section id="tab-bracket" class="hidden">
+      <div class="section-title">Knockout Bracket</div>
+      <div class="sub">32 teams advance: the top 2 from each group plus the 8 best third-placed teams.</div>
+      <div class="kdates" id="kdates"></div>
+      <div class="section-title" style="font-size:1rem">Provisional Qualifiers (live)</div>
+      <div class="grid stand" id="provGrid"></div>
+      <div class="section-title" style="font-size:1rem">Bracket Structure</div>
+      <div class="bracket" id="bracket"></div>
+      <div class="note">Knockouts begin June 28. Exact matchups — especially which third-placed teams go where — are set by FIFA only after all 72 group games finish, so slots show "TBD." Provisional qualifiers above reflect current standings.</div>
+    </section>
+
+    <section id="tab-rules" class="hidden">
+      <div class="section-title">Key Rules of Soccer</div>
+      <div class="sub">The essentials to follow any match.</div>
+      <div class="grid rules" id="ruleGrid"></div>
+    </section>
+
+    <section id="tab-lingo" class="hidden">
+      <div class="section-title">Soccer Lingo &amp; Glossary</div>
+      <div class="sub">Talk the talk while you watch.</div>
+      <div class="grid lingo" id="lingoGrid"></div>
+    </section>
+  </div>
+
+  <div id="detail">
+    <button class="back" onclick="showHome()">← Back to all teams</button>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<footer>
+  Best-effort data from public 2026 World Cup coverage (FIFA, ESPN, CBS Sports, Sky Sports, NBC, UEFA).
+  Results current to June 16, 2026 · squads &amp; times may change. Edit the data arrays at the top of the script to update.
+</footer>
+
+<script>
+/* ============ RULES & LINGO ============ */
+const RULES=[
+ ["⏱️","Match length","Two 45-min halves plus stoppage time, 15-min interval. Knockout ties level after 90 go to 30 mins extra time, then penalties."],
+ ["🥅","Goal","The whole ball must cross the line between the posts and under the bar. Most goals wins."],
+ ["🚩","Offside","An attacker is offside if nearer the goal line than both the ball and the second-last defender when it's played to them — unless in their own half."],
+ ["🟨","Cards","Yellow = caution; two yellows = a red. A straight red means the player is off and the team plays a man down."],
+ ["👐","Handball","Deliberately playing the ball with hand/arm is a foul. Keepers may use hands only in their own penalty area."],
+ ["⚪","Penalty kick","A foul by the defending team inside its own box gives a free shot from 12 yards with only the keeper to beat."],
+ ["🔁","Substitutions","Up to 5 subs across 3 stoppages (plus one in extra time). 2026 also allows concussion subs."],
+ ["📐","Restarts","Throw-in restarts play from the touchline; corner and goal kicks restart after the ball crosses the goal line."],
+ ["👥","Team size","11 per side including a goalkeeper. Drop below 7 players and the team cannot continue."],
+ ["🧮","Group format","48 teams in 12 groups of 4. Top two from each group plus the 8 best third-placed teams reach a 32-team knockout."],
+ ["🎯","VAR","Video Assistant Referee reviews goals, penalties, red cards and mistaken identity to fix clear, obvious errors."],
+ ["⏲️","Added time","The ref adds minutes at the end of each half for stoppages — injuries, subs, celebrations, VAR checks."],
+];
+const LINGO=[
+ ["Brace","A player scoring two goals in one match."],["Hat-trick","Three goals by one player in a match."],
+ ["Clean sheet","Conceding zero goals (credited to keeper/defense)."],["Nutmeg","Playing the ball through an opponent's legs."],
+ ["Box","The penalty area — fouls here can mean a penalty."],["Pitch","The playing field."],
+ ["Stoppage time","Minutes added for delays; also called injury time."],["Through ball","A pass split between defenders for a runner."],
+ ["Tiki-taka","A possession style of short, quick passing and movement."],["Park the bus","Defending deep with nearly everyone behind the ball."],
+ ["Set piece","A free kick or corner — a planned restart routine."],["Derby","A match between fierce or local rivals."],
+ ["Tackle","Using your feet to win the ball from an opponent."],["Cap","One appearance for a national team."],
+ ["Equaliser","A goal that levels the score."],["Own goal","Accidentally scoring into your own net."],
+ ["Counter-attack","Attacking quickly right after winning the ball."],["Advantage","Ref lets play continue after a foul if stopping would help the foulers."],
+ ["Group of death","A group packed with several strong teams."],["Golden boot","Award for the tournament's top scorer."],
+];
+
+/* ============ TEAMS (flag, group, fifa, nick, coach, note, players[name,club,pos]) ============ */
+const T={
+ "Mexico":{f:"🇲🇽",g:"A",fifa:"#17",nick:"El Tri",coach:"Javier Aguirre",note:"Co-hosts, opened with a win.",p:[["Santiago Giménez","Milan","ST"],["Edson Álvarez","Fenerbahçe","CM"],["Hirving Lozano","San Diego FC","W"],["Raúl Jiménez","Fulham","ST"],["Luis Malagón","América","GK"]]},
+ "South Korea":{f:"🇰🇷",g:"A",fifa:"#23",nick:"Taegeuk Warriors",coach:"Hong Myung-bo",note:"Asia's most consistent qualifier.",p:[["Son Heung-min","LAFC","FW"],["Kim Min-jae","Bayern Munich","CB"],["Lee Kang-in","Paris SG","AM"],["Hwang Hee-chan","Wolves","FW"],["Jo Hyeon-woo","Ulsan","GK"]]},
+ "Czechia":{f:"🇨🇿",g:"A",fifa:"#42",nick:"Národní tým",coach:"Ivan Hašek",note:"Reached the finals via the playoffs.",p:[["Patrik Schick","Leverkusen","ST"],["Tomáš Souček","West Ham","CM"],["Adam Hložek","Hoffenheim","FW"],["Ladislav Krejčí","Girona","CB"],["Jindřich Staněk","Slavia Prague","GK"]]},
+ "South Africa":{f:"🇿🇦",g:"A",fifa:"#56",nick:"Bafana Bafana",coach:"Hugo Broos",note:"Back at the World Cup after 16 years.",p:[["Lyle Foster","Burnley","ST"],["Percy Tau","Qatar SC","W"],["Themba Zwane","Mamelodi Sundowns","AM"],["Teboho Mokoena","Mamelodi Sundowns","CM"],["Ronwen Williams","Mamelodi Sundowns","GK"]]},
+
+ "Canada":{f:"🇨🇦",g:"B",fifa:"#28",nick:"Les Rouges",coach:"Jesse Marsch",note:"Co-hosts building on 2022.",p:[["Alphonso Davies","Bayern Munich","LB"],["Jonathan David","Juventus","ST"],["Stephen Eustáquio","Porto","CM"],["Tajon Buchanan","Villarreal","W"],["Cyle Larin","Legia Warsaw","ST"]]},
+ "Bosnia & Herzegovina":{f:"🇧🇦",g:"B",fifa:"#74",nick:"Zmajevi",coach:"Sergej Barbarez",note:"Playoff winners led by a veteran core.",p:[["Edin Džeko","Fiorentina","ST"],["Sead Kolašinac","Atalanta","DF"],["Miralem Pjanić","CSKA Moscow","CM"],["Ermedin Demirović","Stuttgart","FW"],["Nikola Vasilj","St. Pauli","GK"]]},
+ "Qatar":{f:"🇶🇦",g:"B",fifa:"#52",nick:"The Maroon",coach:"Julen Lopetegui",note:"Two-time Asian champions.",p:[["Akram Afif","Al Sadd","FW"],["Almoez Ali","Al Duhail","ST"],["Hassan Al-Haydos","Al Sadd","MF"],["Boualem Khoukhi","Al Sadd","DF"],["Meshaal Barsham","Al Sadd","GK"]]},
+ "Switzerland":{f:"🇨🇭",g:"B",fifa:"#19",nick:"Nati",coach:"Murat Yakin",note:"Reliable tournament performers.",p:[["Granit Xhaka","Sunderland","CM"],["Manuel Akanji","Inter","CB"],["Breel Embolo","Monaco","ST"],["Dan Ndoye","Nottingham Forest","W"],["Yann Sommer","Inter","GK"]]},
+
+ "Scotland":{f:"🏴󠁧󠁢󠁳󠁣󠁴󠁿",g:"C",fifa:"#39",nick:"Tartan Army",coach:"Steve Clarke",note:"At a World Cup for the first time since 1998.",p:[["Andrew Robertson","Liverpool","LB"],["Scott McTominay","Napoli","CM"],["John McGinn","Aston Villa","CM"],["Billy Gilmour","Napoli","CM"],["Angus Gunn","Norwich","GK"]]},
+ "Morocco":{f:"🇲🇦",g:"C",fifa:"#12",nick:"Atlas Lions",coach:"Walid Regragui",note:"2022 semifinalists, Africa's standard-bearers.",p:[["Achraf Hakimi","Paris SG","RB"],["Youssef En-Nesyri","Fenerbahçe","ST"],["Brahim Díaz","Real Madrid","AM"],["Sofyan Amrabat","Fiorentina","CDM"],["Yassine Bounou","Al Hilal","GK"]]},
+ "Brazil":{f:"🇧🇷",g:"C",fifa:"#5",nick:"Seleção",coach:"Carlo Ancelotti",note:"Record five-time world champions.",p:[["Vinícius Júnior","Real Madrid","LW"],["Raphinha","Barcelona","RW"],["Rodrygo","Real Madrid","FW"],["Bruno Guimarães","Newcastle","CM"],["Alisson","Liverpool","GK"]]},
+ "Haiti":{f:"🇭🇹",g:"C",fifa:"#83",nick:"Les Grenadiers",coach:"Sébastien Migné",note:"A rare and emotional World Cup return.",p:[["Frantzdy Pierrot","Al-Khaleej","ST"],["Duckens Nazon","Free agent","FW"],["Carl Sainté","KV Mechelen","MF"],["Ricardo Adé","Slovan Liberec","DF"],["Johny Placide","Free agent","GK"]]},
+
+ "USA":{f:"🇺🇸",g:"D",fifa:"#15",nick:"Stars & Stripes",coach:"Mauricio Pochettino",note:"Co-hosts with home advantage.",p:[["Christian Pulisic","Milan","AM"],["Folarin Balogun","Monaco","ST"],["Weston McKennie","Juventus","CM"],["Timothy Weah","Marseille","FW"],["Antonee Robinson","Fulham","LB"]]},
+ "Australia":{f:"🇦🇺",g:"D",fifa:"#26",nick:"Socceroos",coach:"Tony Popovic",note:"Gritty and well-drilled.",p:[["Jackson Irvine","St. Pauli","CM"],["Riley McGree","Middlesbrough","MF"],["Craig Goodwin","Al-Wehda","W"],["Harry Souttar","Sheffield Utd","CB"],["Mat Ryan","Roma","GK"]]},
+ "Türkiye":{f:"🇹🇷",g:"D",fifa:"#27",nick:"Ay-Yıldızlılar",coach:"Vincenzo Montella",note:"A vibrant young generation.",p:[["Arda Güler","Real Madrid","AM"],["Hakan Çalhanoğlu","Inter","CM"],["Kenan Yıldız","Juventus","FW"],["Ferdi Kadıoğlu","Brighton","DF"],["Uğurcan Çakır","Galatasaray","GK"]]},
+ "Paraguay":{f:"🇵🇾",g:"D",fifa:"#41",nick:"La Albirroja",coach:"Gustavo Alfaro",note:"Back at the World Cup after 16 years.",p:[["Miguel Almirón","Atlanta United","W"],["Julio Enciso","Brighton","FW"],["Antonio Sanabria","Cremonese","ST"],["Gustavo Gómez","Palmeiras","CB"],["Omar Alderete","Sunderland","DF"]]},
+
+ "Germany":{f:"🇩🇪",g:"E",fifa:"#9",nick:"Die Mannschaft",coach:"Julian Nagelsmann",note:"Four-time champions; thrashed Curaçao 7-1.",p:[["Jamal Musiala","Bayern Munich","AM"],["Florian Wirtz","Liverpool","AM"],["Joshua Kimmich","Bayern Munich","CM"],["Kai Havertz","Arsenal","FW"],["Marc-André ter Stegen","Barcelona","GK"]]},
+ "Ivory Coast":{f:"🇨🇮",g:"E",fifa:"#40",nick:"Les Éléphants",coach:"Emerse Faé",note:"Reigning Africa Cup of Nations champions.",p:[["Sébastien Haller","Utrecht","ST"],["Franck Kessié","Al Ahli","CM"],["Simon Adingra","Sunderland","W"],["Evan Ndicka","Roma","CB"],["Yahia Fofana","Angers","GK"]]},
+ "Ecuador":{f:"🇪🇨",g:"E",fifa:"#24",nick:"La Tri",coach:"Sebastián Beccacece",note:"Young, athletic and hard to beat.",p:[["Moisés Caicedo","Chelsea","CM"],["Kendry Páez","Chelsea","AM"],["Pervis Estupiñán","Milan","LB"],["Enner Valencia","Internacional","ST"],["Hernán Galíndez","Huracán","GK"]]},
+ "Curaçao":{f:"🇨🇼",g:"E",fifa:"#82",nick:"Famia Korsou",coach:"Dick Advocaat",note:"Smallest nation ever to reach a World Cup.",p:[["Tahith Chong","Sheffield Utd","W"],["Leandro Bacuna","Free agent","MF"],["Juninho Bacuna","Birmingham","MF"],["Cuco Martina","Free agent","DF"],["Eloy Room","Columbus Crew","GK"]]},
+
+ "Sweden":{f:"🇸🇪",g:"F",fifa:"#22",nick:"Blågult",coach:"Graham Potter",note:"Playoff winners with a fearsome strike force.",p:[["Alexander Isak","Liverpool","ST"],["Viktor Gyökeres","Arsenal","ST"],["Dejan Kulusevski","Tottenham","AM"],["Emil Forsberg","NY Red Bulls","MF"],["Robin Olsen","Free agent","GK"]]},
+ "Japan":{f:"🇯🇵",g:"F",fifa:"#18",nick:"Samurai Blue",coach:"Hajime Moriyasu",note:"Quick, technical and well-organised.",p:[["Takefusa Kubo","Real Sociedad","W"],["Kaoru Mitoma","Brighton","W"],["Wataru Endo","Liverpool","CM"],["Daichi Kamada","Crystal Palace","MF"],["Zion Suzuki","Parma","GK"]]},
+ "Netherlands":{f:"🇳🇱",g:"F",fifa:"#7",nick:"Oranje",coach:"Ronald Koeman",note:"Deep, technical squad eyeing a deep run.",p:[["Virgil van Dijk","Liverpool","CB"],["Cody Gakpo","Liverpool","FW"],["Xavi Simons","RB Leipzig","AM"],["Frenkie de Jong","Barcelona","CM"],["Bart Verbruggen","Brighton","GK"]]},
+ "Tunisia":{f:"🇹🇳",g:"F",fifa:"#49",nick:"Eagles of Carthage",coach:"Sami Trabelsi",note:"Defensively disciplined North Africans.",p:[["Hannibal Mejbri","Burnley","MF"],["Youssef Msakni","Al-Arabi","W"],["Aïssa Laïdouni","Wolfsburg","CM"],["Montassar Talbi","Lorient","CB"],["Aymen Dahmen","CS Sfaxien","GK"]]},
+
+ "New Zealand":{f:"🇳🇿",g:"G",fifa:"#86",nick:"All Whites",coach:"Darren Bazeley",note:"Oceania's flag-bearers.",p:[["Chris Wood","Nottingham Forest","ST"],["Marko Stamenić","Olympiacos","MF"],["Liberato Cacace","Empoli","LB"],["Matthew Garbett","NAC Breda","MF"],["Max Crocombe","Burton Albion","GK"]]},
+ "Iran":{f:"🇮🇷",g:"G",fifa:"#21",nick:"Team Melli",coach:"Amir Ghalenoei",note:"Asia's powerhouse, qualified early.",p:[["Mehdi Taremi","Inter","ST"],["Sardar Azmoun","Shabab Al Ahli","FW"],["Alireza Jahanbakhsh","Heerenveen","W"],["Saman Ghoddos","Brentford","MF"],["Alireza Beiranvand","Tractor","GK"]]},
+ "Egypt":{f:"🇪🇬",g:"G",fifa:"#33",nick:"The Pharaohs",coach:"Hossam Hassan",note:"Back at the World Cup behind Salah.",p:[["Mohamed Salah","Liverpool","FW"],["Omar Marmoush","Manchester City","FW"],["Mohamed Elneny","Al Jazira","CM"],["Trezeguet","Trabzonspor","W"],["Mohamed El Shenawy","Al Ahly","GK"]]},
+ "Belgium":{f:"🇧🇪",g:"G",fifa:"#8",nick:"Red Devils",coach:"Rudi García",note:"Experienced core still led by De Bruyne.",p:[["Kevin De Bruyne","Napoli","AM"],["Jérémy Doku","Manchester City","LW"],["Romelu Lukaku","Napoli","ST"],["Youri Tielemans","Aston Villa","CM"],["Thibaut Courtois","Real Madrid","GK"]]},
+
+ "Saudi Arabia":{f:"🇸🇦",g:"H",fifa:"#58",nick:"Green Falcons",coach:"Hervé Renard",note:"2022's giant-killers (beat Argentina).",p:[["Salem Al-Dawsari","Al Hilal","W"],["Firas Al-Buraikan","Al Ahli","ST"],["Mohamed Kanno","Al Hilal","CM"],["Ali Al-Bulaihi","Al Hilal","CB"],["Mohammed Al-Owais","Al Hilal","GK"]]},
+ "Uruguay":{f:"🇺🇾",g:"H",fifa:"#16",nick:"La Celeste",coach:"Marcelo Bielsa",note:"Bielsa's intense, talented side.",p:[["Federico Valverde","Real Madrid","CM"],["Darwin Núñez","Al Hilal","ST"],["Ronald Araújo","Barcelona","CB"],["Rodrigo Bentancur","Tottenham","CM"],["Sergio Rochet","Internacional","GK"]]},
+ "Spain":{f:"🇪🇸",g:"H",fifa:"#2",nick:"La Roja",coach:"Luis de la Fuente",note:"Euro 2024 champions, tournament favorites.",p:[["Lamine Yamal","Barcelona","RW"],["Rodri","Manchester City","CM"],["Pedri","Barcelona","CM"],["Nico Williams","Athletic Club","LW"],["Unai Simón","Athletic Club","GK"]]},
+ "Cabo Verde":{f:"🇨🇻",g:"H",fifa:"#70",nick:"Blue Sharks",coach:"Pedro Leitão Brito 'Bubista'",note:"Dream debut at a World Cup.",p:[["Ryan Mendes","Free agent","W"],["Garry Rodrigues","APOEL","W"],["Jamiro Monteiro","San Jose","CM"],["Roberto Lopes 'Pico'","Shamrock Rovers","CB"],["Vozinha","Marítimo","GK"]]},
+
+ "France":{f:"🇫🇷",g:"I",fifa:"#3",nick:"Les Bleus",coach:"Didier Deschamps",note:"2018 winners; opened with a 3-1 win.",p:[["Kylian Mbappé","Real Madrid","FW"],["Ousmane Dembélé","Paris SG","FW"],["Aurélien Tchouaméni","Real Madrid","CM"],["William Saliba","Arsenal","CB"],["Mike Maignan","Milan","GK"]]},
+ "Senegal":{f:"🇸🇳",g:"I",fifa:"#20",nick:"Lions of Teranga",coach:"Pape Thiaw",note:"Physical, talented African heavyweights.",p:[["Sadio Mané","Al Nassr","FW"],["Nicolas Jackson","Bayern Munich","ST"],["Pape Matar Sarr","Tottenham","CM"],["Kalidou Koulibaly","Al Hilal","CB"],["Édouard Mendy","Al Ahli","GK"]]},
+ "Norway":{f:"🇳🇴",g:"I",fifa:"#30",nick:"Løvene",coach:"Ståle Solbakken",note:"Back at a World Cup; opened with a 4-1 win.",p:[["Erling Haaland","Manchester City","ST"],["Martin Ødegaard","Arsenal","AM"],["Alexander Sørloth","Atlético Madrid","FW"],["Antonio Nusa","RB Leipzig","W"],["Ørjan Nyland","Sevilla","GK"]]},
+ "Iraq":{f:"🇮🇶",g:"I",fifa:"#58",nick:"Lions of Mesopotamia",coach:"Graham Arnold",note:"Reached the finals via intercontinental playoff.",p:[["Aymen Hussein","Al-Qadsiah","ST"],["Ali Jasim","Como","FW"],["Amir Al-Ammari","Halmstad","MF"],["Zidane Iqbal","Utrecht","MF"],["Jalal Hassan","Al-Shorta","GK"]]},
+
+ "Argentina":{f:"🇦🇷",g:"J",fifa:"#1",nick:"La Albiceleste",coach:"Lionel Scaloni",note:"Defending champions (2022).",p:[["Lionel Messi","Inter Miami","FW"],["Julián Álvarez","Atlético Madrid","FW"],["Lautaro Martínez","Inter","FW"],["Enzo Fernández","Chelsea","CM"],["Emiliano Martínez","Aston Villa","GK"]]},
+ "Austria":{f:"🇦🇹",g:"J",fifa:"#22",nick:"Das Team",coach:"Ralf Rangnick",note:"Rangnick's high-energy pressing side.",p:[["Marcel Sabitzer","Borussia Dortmund","MF"],["David Alaba","Real Madrid","DF"],["Konrad Laimer","Bayern Munich","CM"],["Christoph Baumgartner","RB Leipzig","AM"],["Marko Arnautović","Free agent","FW"]]},
+ "Algeria":{f:"🇩🇿",g:"J",fifa:"#37",nick:"Les Fennecs",coach:"Vladimir Petković",note:"Talented and back after missing 2022.",p:[["Riyad Mahrez","Al Ahli","W"],["Ismaël Bennacer","Milan","CM"],["Houssem Aouar","Roma","MF"],["Saïd Benrahma","Neom SC","W"],["Aïssa Mandi","Lille","CB"]]},
+ "Jordan":{f:"🇯🇴",g:"J",fifa:"#62",nick:"Al-Nashama",coach:"Jamal Sellami",note:"Maiden World Cup after a stunning run.",p:[["Mousa Al-Tamari","Montpellier","W"],["Yazan Al-Naimat","Al-Ahli (KSA)","FW"],["Noor Al-Rawabdeh","Al-Faisaly","MF"],["Ehsan Haddad","Al-Hussein","DF"],["Yazeed Abulaila","Al-Ramtha","GK"]]},
+
+ "Portugal":{f:"🇵🇹",g:"K",fifa:"#6",nick:"Seleção das Quinas",coach:"Roberto Martínez",note:"Nations League winners with a golden generation.",p:[["Cristiano Ronaldo","Al Nassr","FW"],["Bruno Fernandes","Manchester Utd","AM"],["Bernardo Silva","Manchester City","MF"],["Vitinha","Paris SG","CM"],["Diogo Costa","Porto","GK"]]},
+ "Colombia":{f:"🇨🇴",g:"K",fifa:"#14",nick:"Los Cafeteros",coach:"Néstor Lorenzo",note:"Skilful and in fine recent form.",p:[["Luis Díaz","Bayern Munich","W"],["James Rodríguez","Club León","AM"],["Jhon Durán","Fenerbahçe","ST"],["Richard Ríos","Benfica","CM"],["David Ospina","Atlético Nacional","GK"]]},
+ "DR Congo":{f:"🇨🇩",g:"K",fifa:"#56",nick:"Leopards",coach:"Sébastien Desabre",note:"Reached the finals via intercontinental playoff.",p:[["Yoane Wissa","Newcastle","FW"],["Cédric Bakambu","Real Betis","ST"],["Chancel Mbemba","Lille","CB"],["Théo Bongonda","Spartak Moscow","W"],["Lionel Mpasi","Rodez","GK"]]},
+ "Uzbekistan":{f:"🇺🇿",g:"K",fifa:"#57",nick:"White Wolves",coach:"Timur Kapadze",note:"Historic first-ever World Cup.",p:[["Eldor Shomurodov","Roma","ST"],["Abbosbek Fayzullaev","CSKA Moscow","AM"],["Jaloliddin Masharipov","Neftçi","W"],["Otabek Shukurov","Al-Wehda","MF"],["Utkir Yusupov","Pakhtakor","GK"]]},
+
+ "England":{f:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",g:"L",fifa:"#4",nick:"Three Lions",coach:"Thomas Tuchel",note:"Back-to-back Euro finalists chasing a first WC since 1966.",p:[["Jude Bellingham","Real Madrid","CM"],["Harry Kane","Bayern Munich","ST"],["Bukayo Saka","Arsenal","RW"],["Declan Rice","Arsenal","CM"],["Jordan Pickford","Everton","GK"]]},
+ "Croatia":{f:"🇭🇷",g:"L",fifa:"#10",nick:"Vatreni",coach:"Zlatko Dalić",note:"2018 finalists, 2022 third place.",p:[["Luka Modrić","Milan","CM"],["Joško Gvardiol","Manchester City","CB"],["Mateo Kovačić","Manchester City","CM"],["Andrej Kramarić","Hoffenheim","FW"],["Dominik Livaković","Fenerbahçe","GK"]]},
+ "Ghana":{f:"🇬🇭",g:"L",fifa:"#73",nick:"Black Stars",coach:"Otto Addo",note:"Four-time African champions.",p:[["Mohammed Kudus","Tottenham","AM"],["Thomas Partey","Villarreal","CM"],["Iñaki Williams","Athletic Club","FW"],["Jordan Ayew","Leicester","FW"],["Lawrence Ati-Zigi","St. Gallen","GK"]]},
+ "Panama":{f:"🇵🇦",g:"L",fifa:"#31",nick:"La Marea Roja",coach:"Thomas Christiansen",note:"Rising CONCACAF side.",p:[["Adalberto Carrasquilla","Houston Dynamo","CM"],["Ismael Díaz","León","FW"],["José Fajardo","Independiente","ST"],["Michael Murillo","Marseille","DF"],["Orlando Mosquera","Mafra","GK"]]},
+};
+
+/* ============ GROUP-STAGE MATCHES (hs/as null = not played) ============ */
+const M=[
+ ["A","Jun 11","Mexico","South Africa",2,0],["A","Jun 11","South Korea","Czechia",2,1],
+ ["A","Jun 18","Czechia","South Africa",null,null],["A","Jun 18","Mexico","South Korea",null,null],
+ ["A","Jun 24","Czechia","Mexico",null,null],["A","Jun 24","South Africa","South Korea",null,null],
+
+ ["B","Jun 12","Canada","Bosnia & Herzegovina",1,1],["B","Jun 13","Qatar","Switzerland",1,1],
+ ["B","Jun 18","Switzerland","Bosnia & Herzegovina",null,null],["B","Jun 18","Canada","Qatar",null,null],
+ ["B","Jun 24","Switzerland","Canada",null,null],["B","Jun 24","Bosnia & Herzegovina","Qatar",null,null],
+
+ ["C","Jun 13","Brazil","Morocco",1,1],["C","Jun 13","Scotland","Haiti",1,0],
+ ["C","Jun 19","Scotland","Morocco",null,null],["C","Jun 19","Brazil","Haiti",null,null],
+ ["C","Jun 24","Scotland","Brazil",null,null],["C","Jun 24","Morocco","Haiti",null,null],
+
+ ["D","Jun 12","USA","Paraguay",4,1],["D","Jun 13","Australia","Türkiye",2,0],
+ ["D","Jun 19","USA","Australia",null,null],["D","Jun 19","Türkiye","Paraguay",null,null],
+ ["D","Jun 25","Türkiye","USA",null,null],["D","Jun 25","Paraguay","Australia",null,null],
+
+ ["E","Jun 14","Germany","Curaçao",7,1],["E","Jun 14","Ivory Coast","Ecuador",1,0],
+ ["E","Jun 20","Germany","Ivory Coast",null,null],["E","Jun 20","Ecuador","Curaçao",null,null],
+ ["E","Jun 25","Ecuador","Germany",null,null],["E","Jun 25","Curaçao","Ivory Coast",null,null],
+
+ ["F","Jun 14","Netherlands","Japan",2,2],["F","Jun 14","Sweden","Tunisia",5,1],
+ ["F","Jun 20","Netherlands","Sweden",null,null],["F","Jun 20","Tunisia","Japan",null,null],
+ ["F","Jun 25","Japan","Sweden",null,null],["F","Jun 25","Tunisia","Netherlands",null,null],
+
+ ["G","Jun 15","Belgium","Egypt",1,1],["G","Jun 15","Iran","New Zealand",2,2],
+ ["G","Jun 21","Belgium","Iran",null,null],["G","Jun 21","New Zealand","Egypt",null,null],
+ ["G","Jun 26","Egypt","Iran",null,null],["G","Jun 26","New Zealand","Belgium",null,null],
+
+ ["H","Jun 15","Spain","Cabo Verde",0,0],["H","Jun 15","Saudi Arabia","Uruguay",1,1],
+ ["H","Jun 21","Spain","Saudi Arabia",null,null],["H","Jun 21","Uruguay","Cabo Verde",null,null],
+ ["H","Jun 26","Cabo Verde","Saudi Arabia",null,null],["H","Jun 26","Uruguay","Spain",null,null],
+
+ ["I","Jun 16","France","Senegal",3,1],["I","Jun 16","Iraq","Norway",1,4],
+ ["I","Jun 22","France","Iraq",null,null],["I","Jun 22","Norway","Senegal",null,null],
+ ["I","Jun 26","Norway","France",null,null],["I","Jun 26","Senegal","Iraq",null,null],
+
+ ["J","Jun 16","Argentina","Algeria",null,null],["J","Jun 16","Austria","Jordan",null,null],
+ ["J","Jun 22","Argentina","Austria",null,null],["J","Jun 22","Jordan","Algeria",null,null],
+ ["J","Jun 27","Algeria","Austria",null,null],["J","Jun 27","Jordan","Argentina",null,null],
+
+ ["K","Jun 17","Portugal","DR Congo",null,null],["K","Jun 17","Uzbekistan","Colombia",null,null],
+ ["K","Jun 23","Portugal","Uzbekistan",null,null],["K","Jun 23","Colombia","DR Congo",null,null],
+ ["K","Jun 27","Colombia","Portugal",null,null],["K","Jun 27","DR Congo","Uzbekistan",null,null],
+
+ ["L","Jun 17","England","Croatia",null,null],["L","Jun 17","Ghana","Panama",null,null],
+ ["L","Jun 23","England","Ghana",null,null],["L","Jun 23","Panama","Croatia",null,null],
+ ["L","Jun 27","Panama","England",null,null],["L","Jun 27","Croatia","Ghana",null,null],
+];
+
+const VENUE={ }; // (venues kept brief in match labels; omitted for clarity)
+const GROUPS="ABCDEFGHIJKL".split("");
+
+/* ============ HELPERS ============ */
+function el(t,c,h){const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;}
+function teamsInGroup(g){return Object.keys(T).filter(n=>T[n].g===g);}
+
+function standings(g){
+  const tbl={};
+  teamsInGroup(g).forEach(n=>tbl[n]={n,mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0});
+  M.filter(m=>m[0]===g && m[4]!=null).forEach(([,,h,a,hs,as])=>{
+    tbl[h].mp++;tbl[a].mp++;tbl[h].gf+=hs;tbl[h].ga+=as;tbl[a].gf+=as;tbl[a].ga+=hs;
+    if(hs>as){tbl[h].w++;tbl[h].pts+=3;tbl[a].l++;}
+    else if(hs<as){tbl[a].w++;tbl[a].pts+=3;tbl[h].l++;}
+    else{tbl[h].d++;tbl[a].d++;tbl[h].pts++;tbl[a].pts++;}
+  });
+  return Object.values(tbl).sort((x,y)=>y.pts-x.pts||(y.gf-y.ga)-(x.gf-x.ga)||y.gf-x.gf||x.n.localeCompare(y.n));
+}
+
+/* ============ RENDER: TEAMS ============ */
+function renderTeams(){
+  const wrap=document.getElementById('teamGroups');
+  GROUPS.forEach(g=>{
+    wrap.appendChild(el('div','group-label',`Group ${g}`));
+    const grid=el('div','grid teams');
+    teamsInGroup(g).forEach(n=>{
+      const c=el('div','card team-card',
+        `<div class="flag">${T[n].f}</div><div class="name">${n}</div><div class="grp">FIFA ${T[n].fifa}</div>`);
+      c.onclick=()=>showTeam(n);grid.appendChild(c);
+    });
+    wrap.appendChild(grid);
+  });
+}
+
+/* ============ RENDER: STANDINGS ============ */
+function standTable(g){
+  const rows=standings(g).map((r,i)=>{
+    const cls=i<2?'q1':(i===2?'q3':'qx');
+    return `<tr><td class="tname"><span class="pos ${cls}">${i+1}</span>${T[r.n].f} ${r.n}</td>
+      <td>${r.mp}</td><td>${r.w}</td><td>${r.d}</td><td>${r.l}</td><td>${r.gf-r.ga>0?'+':''}${r.gf-r.ga}</td>
+      <td class="pts">${r.pts}</td></tr>`;
+  }).join('');
+  return `<div class="stable"><h4>Group ${g}</h4><table>
+    <tr><th class="tname">Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr>
+    ${rows}</table></div>`;
+}
+function renderStandings(){
+  document.getElementById('standGrid').innerHTML=GROUPS.map(standTable).join('');
+}
+
+/* ============ RENDER: BRACKET ============ */
+function renderBracket(){
+  const dates=[
+   ["Round of 32","Jun 28 – Jul 3","16 matches"],
+   ["Round of 16","Jul 4 – 7","8 matches"],
+   ["Quarter-finals","Jul 9 – 11","4 matches"],
+   ["Semi-finals","Jul 14 – 15","2 matches"],
+   ["Final","Jul 19 · MetLife","1 match"],
+  ];
+  document.getElementById('kdates').innerHTML=dates.map(d=>
+    `<div class="kdate"><div class="r">${d[0]}</div><div class="d">${d[1]}</div><div class="m">${d[2]}</div></div>`).join('');
+
+  // provisional qualifiers
+  document.getElementById('provGrid').innerHTML=GROUPS.map(g=>{
+    const s=standings(g);
+    const items=s.slice(0,2).map((r,i)=>`<div class="bslot"><div class="t prov">${i+1}. ${T[r.n].f} ${r.n} <span style="float:right;color:var(--muted)">${r.pts} pts</span></div></div>`).join('');
+    return `<div class="stable"><h4>Group ${g}</h4>${items}
+      <div style="font-size:.74rem;color:var(--muted);margin-top:4px">3rd: ${T[s[2].n].f} ${s[2].n} (${s[2].pts})</div></div>`;
+  }).join('');
+
+  // structure tree
+  const cols=[["Round of 32",16],["Round of 16",8],["Quarter-finals",4],["Semi-finals",2],["Final",1]];
+  document.getElementById('bracket').innerHTML=cols.map(([name,n])=>{
+    let slots='';
+    for(let i=0;i<n;i++){
+      slots+=`<div class="bslot"><div class="t">TBD</div><div class="vs">vs</div><div class="t">TBD</div></div>`;
+    }
+    if(name==="Final") slots=`<div class="bslot"><div class="t">🏆 Champion TBD</div><div class="vs">— Jul 19 —</div><div class="t">TBD vs TBD</div></div>`;
+    return `<div class="bcol"><h5>${name}</h5>${slots}</div>`;
+  }).join('');
+}
+
+/* ============ RENDER: TEAM DETAIL ============ */
+function showTeam(n){
+  const t=T[n];
+  const players=t.p.map(p=>`<div class="player"><div class="av">${p[2]}</div>
+    <div class="pinfo"><div class="pname">${p[0]}</div><div class="pmeta">${p[1]}</div></div></div>`).join('');
+  const mine=M.filter(m=>m[2]===n||m[3]===n);
+  const sched=mine.map(([g,d,h,a,hs,as])=>{
+    const home=h===n; const opp=home?a:h;
+    let badge=`<span class="badge b-up">Upcoming</span>`, score='';
+    if(hs!=null){
+      const my=home?hs:as, ot=home?as:hs;
+      score=` <span style="color:var(--muted)">${hs}–${as}</span>`;
+      badge=my>ot?`<span class="badge b-win">W ${my}–${ot}</span>`:my<ot?`<span class="badge b-loss">L ${my}–${ot}</span>`:`<span class="badge b-draw">D ${my}–${ot}</span>`;
+    }
+    return `<div class="match">${badge}<div class="date">${d}</div>
+      <div class="fix">${n} vs ${opp}</div><div class="venue">Group ${g}</div></div>`;
+  }).join('');
+
+  document.getElementById('detailContent').innerHTML=`
+   <div class="team-head"><div class="flag">${t.f}</div>
+     <div><h2>${n}</h2>
+       <div class="meta">${t.nick} · Group ${t.g} · Coach: ${t.coach}</div>
+       <div><span class="pill">FIFA ${t.fifa}</span><span class="pill">${t.note}</span></div>
+     </div></div>
+   <div class="two-col">
+     <div class="panel"><h3>⭐ Key Players</h3>${players}</div>
+     <div class="panel"><h3>📅 Group-Stage Schedule</h3>${sched}
+       <div class="note">Results current to June 16, 2026. Kickoff order may vary.</div></div>
+   </div>`;
+  document.getElementById('home').style.display='none';
+  document.getElementById('detail').style.display='block';
+  document.getElementById('homeTabs').style.visibility='hidden';
+  window.scrollTo(0,0);
+}
+function showHome(){
+  document.getElementById('detail').style.display='none';
+  document.getElementById('home').style.display='block';
+  document.getElementById('homeTabs').style.visibility='visible';
+  window.scrollTo(0,0);
+}
+
+/* ============ TABS ============ */
+document.querySelectorAll('#homeTabs button').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('#homeTabs button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    ['teams','standings','bracket','rules','lingo'].forEach(t=>{
+      document.getElementById('tab-'+t).classList.toggle('hidden', t!==b.dataset.tab);
+    });
+  };
+});
+
+document.getElementById('ruleGrid').innerHTML=RULES.map(([i,t,b])=>`<div class="card rule-card"><h3>${i} ${t}</h3><p>${b}</p></div>`).join('');
+document.getElementById('lingoGrid').innerHTML=LINGO.map(([t,d])=>`<div class="card lingo-card"><div class="term">${t}</div><div class="def">${d}</div></div>`).join('');
+renderTeams();renderStandings();renderBracket();
+</script>
+</body>
+</html>
